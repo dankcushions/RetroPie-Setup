@@ -168,6 +168,9 @@ function configure_retroarch() {
     iniSet "rewind_granularity" "2"
     iniSet "input_rewind" "r"
 
+    # set auto-SRAM save to 30 minutes
+    iniSet "autosave_interval" "1800"
+
     # enable gpu screenshots
     iniSet "video_gpu_screenshot" "true"
 
