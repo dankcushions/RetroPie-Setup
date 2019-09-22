@@ -12,9 +12,9 @@
 AUDIO_PLUGIN="mupen64plus-audio-sdl"
 VIDEO_PLUGIN="$1"
 ROM="$2"
-RES="$3"
-RSP_PLUGIN="$4"
-[[ -n "$RES" ]] && RES="--resolution $RES"
+[[ "$3" -ne 0 ]] && RES="$3"
+[[ "$4" -ne 0 ]] && RSP_PLUGIN="$4"
+PARAMS="${@:5}"
 [[ -z "$RSP_PLUGIN" ]] && RSP_PLUGIN="mupen64plus-rsp-hle"
 
 rootdir="/opt/retropie"
@@ -331,6 +331,7 @@ function useTexturePacks() {
 function autoset() {
     VIDEO_PLUGIN="mupen64plus-video-GLideN64"
     RES="--resolution 320x240"
+    PARAMS="--set Video-GLideN64[UseNativeResolutionFactor]=1"
 
     local game
     # these games run fine and look better with 640x480
@@ -351,6 +352,7 @@ function autoset() {
     for game in "${highres[@]}"; do
         if [[ "${ROM,,}" == *"$game"* ]]; then
             RES="--resolution 640x480"
+            PARAMS="--set Video-GLideN64[UseNativeResolutionFactor]=2"
             break
         fi
     done
@@ -440,9 +442,9 @@ getAutoConf mupen64plus_texture_packs && useTexturePacks
 
 if [[ "$(sed -n '/^Hardware/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo)" == BCM* ]]; then
     # If a raspberry pi is used lower resolution to 320x240 and enable SDL dispmanx scaling mode 1
-    SDL_VIDEO_RPI_SCALE_MODE=1 "$rootdir/emulators/mupen64plus/bin/mupen64plus" --noosd --windowed $RES --rsp ${RSP_PLUGIN}.so --gfx ${VIDEO_PLUGIN}.so --audio ${AUDIO_PLUGIN}.so --configdir "$configdir/n64" --datadir "$configdir/n64" "$ROM"
+    SDL_VIDEO_RPI_SCALE_MODE=1 "$rootdir/emulators/mupen64plus/bin/mupen64plus" --noosd --windowed $RES $PARAMS --rsp ${RSP_PLUGIN}.so --gfx ${VIDEO_PLUGIN}.so --audio ${AUDIO_PLUGIN}.so --configdir "$configdir/n64" --datadir "$configdir/n64" "$ROM"
 elif [[ -e /opt/vero3/lib/libMali.so  ]]; then
-    SDL_AUDIODRIVER=alsa "$rootdir/emulators/mupen64plus/bin/mupen64plus" --noosd --fullscreen --rsp ${RSP_PLUGIN}.so --gfx ${VIDEO_PLUGIN}.so --audio mupen64plus-audio-sdl.so --configdir "$configdir/n64" --datadir "$configdir/n64" "$ROM"
+    SDL_AUDIODRIVER=alsa "$rootdir/emulators/mupen64plus/bin/mupen64plus" --noosd --fullscreen $PARAMS --rsp ${RSP_PLUGIN}.so --gfx ${VIDEO_PLUGIN}.so --audio mupen64plus-audio-sdl.so --configdir "$configdir/n64" --datadir "$configdir/n64" "$ROM"
 else
-    SDL_AUDIODRIVER=pulse "$rootdir/emulators/mupen64plus/bin/mupen64plus" --noosd --fullscreen --rsp ${RSP_PLUGIN}.so --gfx ${VIDEO_PLUGIN}.so --audio mupen64plus-audio-sdl.so --configdir "$configdir/n64" --datadir "$configdir/n64" "$ROM"
+    SDL_AUDIODRIVER=pulse "$rootdir/emulators/mupen64plus/bin/mupen64plus" --noosd --fullscreen $PARAMS --rsp ${RSP_PLUGIN}.so --gfx ${VIDEO_PLUGIN}.so --audio mupen64plus-audio-sdl.so --configdir "$configdir/n64" --datadir "$configdir/n64" "$ROM"
 fi
