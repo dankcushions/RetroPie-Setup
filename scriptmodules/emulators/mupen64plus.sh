@@ -234,7 +234,7 @@ function configure_mupen64plus() {
         local gpu_mem
         gpu_mem="$(vcgencmd get_mem gpu | grep -o '[0-9]*')"
         iniSet "CacheSize" "$(( gpu_mem * 3/4 ))"
-        # Disable FB emulation until visual issues are sorted out
+        # Enable Frame Buffer Emulation
         iniSet "EnableFBEmulation" "True"
         # Use native res
         iniSet "UseNativeResolutionFactor" "1"

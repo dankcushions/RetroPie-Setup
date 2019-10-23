@@ -253,8 +253,6 @@ function testCompatibility() {
                 config_version=$(<"$configdir/n64/GLideN64_config_version.ini")
             fi
             iniSet "configVersion" "$config_version"
-            # Enable FBEmulation if necessary
-            iniSet "EnableFBEmulation" "True"
             # Set native resolution factor of 1
             iniSet "UseNativeResolutionFactor" "1"
             for game in "${GLideN64NativeResolution_blacklist[@]}"; do
