@@ -41,7 +41,7 @@ function build_lr-mupen64plus-next() {
         isPlatform "arm" && params+=(WITH_DYNAREC=arm)
         isPlatform "neon" && params+=(HAVE_NEON=1)
         isPlatform "gles" && params+=(FORCE_GLES=1)
-        isPlatform "kms" && params+=(FORCE_GLES3=1)
+        isPlatform "gles3" && params+=(FORCE_GLES3=1)
     fi
     # use a custom core name to avoid core option name clashes with lr-mupen64plus
     params+=(CORE_NAME=mupen64plus-next)
