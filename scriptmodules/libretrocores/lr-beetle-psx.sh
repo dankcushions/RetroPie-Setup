@@ -17,7 +17,8 @@ rp_module_section="opt x86=main"
 rp_module_flags="!videocore"
 
 function depends_lr-beetle-psx() {
-    local depends=(libvulkan-dev libgl1-mesa-dev)
+    local depends=()
+    isPlatform "x86" && depends+=(libvulkan-dev libgl1-mesa-dev)
     getDepends "${depends[@]}"
 }
 
@@ -26,23 +27,30 @@ function sources_lr-beetle-psx() {
 }
 
 function build_lr-beetle-psx() {
+    local params=()
+    local target="mednafen_psx_libretro.so"
+    if isPlatform "x86"; then
+        params+=(HAVE_HW=1)
+        target="mednafen_psx_hw_libretro.so"
+    fi
     make clean
-    make HAVE_HW=1
-    md_ret_require=(
-        'mednafen_psx_hw_libretro.so'
-    )
+    make "${params[@]}"
+    md_ret_require="$md_build/$target"
 }
 
 function install_lr-beetle-psx() {
-    md_ret_files=(
-        'mednafen_psx_hw_libretro.so'
-    )
+    local target="mednafen_psx_libretro.so"
+    isPlatform "x86" && target="mednafen_psx_hw_libretro.so"
+    md_ret_files="$target"
 }
 
 function configure_lr-beetle-psx() {
+    local target="mednafen_psx_libretro.so"
+    isPlatform "x86" && target="mednafen_psx_hw_libretro.so"
+
     mkRomDir "psx"
     ensureSystemretroconfig "psx"
 
-    addEmulator 0 "$md_id" "psx" "$md_inst/mednafen_psx_hw_libretro.so"
+    addEmulator 0 "$md_id" "psx" "$md_inst/$target"
     addSystem "psx"
 }
