@@ -32,6 +32,9 @@ function build_lr-beetle-psx() {
     if isPlatform "x86"; then
         params+=(HAVE_HW=1)
         target="mednafen_psx_hw_libretro.so"
+    else
+        # enable the dynamic recompiler for non-x86 platforms
+        params+=(HAVE_LIGHTREC=1)
     fi
     make clean
     make "${params[@]}"
@@ -50,6 +53,8 @@ function configure_lr-beetle-psx() {
 
     mkRomDir "psx"
     ensureSystemretroconfig "psx"
+
+    setRetroArchCoreOption "beetle_psx_cd_access_method" "async"
 
     addEmulator 0 "$md_id" "psx" "$md_inst/$target"
     addSystem "psx"
