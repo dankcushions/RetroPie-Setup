@@ -35,6 +35,8 @@ function build_lr-pcsx-rearmed() {
         else
             params+=(HAVE_NEON=0 BUILTIN_GPU=peops)
         fi
+    elif isPlatform "aarch64"; then
+        params+=(ARCH=arm64 BUILTIN_GPU=peops)
     fi
 
     make -f Makefile.libretro "${params[@]}" clean
