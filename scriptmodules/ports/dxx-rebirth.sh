@@ -22,7 +22,7 @@ function depends_dxx-rebirth() {
     elif isPlatform "gles" && ! isPlatform "mesa"; then
         depends+=(libgles2-mesa-dev)
     else
-        depends+=(libgl1-mesa-dev libglu1-mesa-dev libsdl2-dev libsdl2-mixer-dev)
+        depends+=(libgl1-mesa-dev libglu1-mesa-dev libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev)
     fi
 
     getDepends "${depends[@]}"
