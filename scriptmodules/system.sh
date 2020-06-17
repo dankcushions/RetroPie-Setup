@@ -78,8 +78,10 @@ function conf_build_vars() {
     # calculate build concurrency based on cores and available memory
     __jobs=1
     if [[ "$(nproc)" -gt 1 ]]; then
-        # if we have less than 1gb of ram free, then limit build jobs to 2
-        if [[ "$__memory_avail" -lt 1024 ]]; then
+        # reduce jobs based on free ram - 1gb for 32bit/2gb for 64bit
+        local mem_check=1024
+        isPlatform "64bit" && mem_check=$(($mem_check * 2))
+        if [[ "$__memory_avail" -lt "$mem_check" ]]; then
            __jobs=2
         else
            __jobs=$(nproc)
