@@ -39,10 +39,9 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.8
-    applyPatch "$md_data/01_hotkey_hack.diff"
-    applyPatch "$md_data/02_disable_search.diff"
-    applyPatch "$md_data/03_shader_path_config_enable.diff"
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.9
+    applyPatch "$md_data/01_disable_search.diff"
+    applyPatch "$md_data/02_shader_path_config_enable.diff"
 }
 
 function build_retroarch() {
