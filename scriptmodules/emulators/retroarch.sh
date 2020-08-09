@@ -39,7 +39,7 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.9
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.9.0
     applyPatch "$md_data/01_disable_search.diff"
     applyPatch "$md_data/02_shader_path_config_enable.diff"
     applyPatch "$md_data/03_revert_default_save_paths.diff"
