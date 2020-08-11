@@ -22,7 +22,7 @@ function depends_lr-duckstation() {
 }
 
 function sources_lr-duckstation() {
-    gitPullOrClone "$md_build" https://github.com/dankcushions/duckstation.git gles31
+    gitPullOrClone "$md_build" https://github.com/stenzek/duckstation.git
 }
 
 function build_lr-duckstation() {

@@ -43,6 +43,8 @@ function sources_retroarch() {
     applyPatch "$md_data/01_disable_search.diff"
     applyPatch "$md_data/02_shader_path_config_enable.diff"
     applyPatch "$md_data/03_revert_default_save_paths.diff"
+    # Force GLES 3.1 on RPI4. See https://github.com/libretro/RetroArch/issues/11143
+    isPlatform "rpi4" && applyPatch "$md_data/04_force_gles_3_1.diff"
 }
 
 function build_retroarch() {
