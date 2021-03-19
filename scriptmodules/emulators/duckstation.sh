@@ -11,7 +11,7 @@
 
 rp_module_id="duckstation"
 rp_module_desc="PlayStation emulator DuckStation"
-rp_module_help="ROM Extensions: .pbp .cue .bin .chd .img\n\nCopy your PlayStation roms to $romdir/psx\n\nCopy the required BIOS file to $biosdir"
+rp_module_help="ROM Extensions: .pbp .cue .bin .chd .img .ecm\n\nCopy your PlayStation roms to $romdir/psx\n\nCopy the required BIOS file to $biosdir"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/stenzek/duckstation/master/LICENSE"
 rp_module_section="exp"
 rp_module_flags=""
@@ -47,12 +47,12 @@ function configure_duckstation() {
     mkRomDir "psx"
     moveConfigDir "$md_inst/bin/bios" "$biosdir"
     # create config file
-    local config="$md_conf_root/psx/duckstation.cfg"
+    local config="$md_conf_root/psx/duckstation.ini"
     touch "$config"
     chown -R $user:$user "$config"
     # chris, needed?
     chown -R $user:$user "$md_inst/bin"
 
-    addEmulator 0 "$md_id" "psx" "LIBGL_ALWAYS_SOFTWARE=1 PREFER_GLES_CONTEXT=1 $md_inst/bin/duckstation-nogui -portable -settings $config -- %ROM%"
+    addEmulator 0 "$md_id" "psx" "$md_inst/bin/duckstation-nogui -portable -settings $config -- %ROM%"
     addSystem "psx"
 }

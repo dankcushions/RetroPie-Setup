@@ -82,6 +82,7 @@ function sources_mesa() {
     # lower dependencies from debian-experimental packaging
     cd debian
     applyPatch "$md_data/01-lower-dependencies.diff"
+    applyPatch "$md_data/02-mesa-release.diff"
     cd ..
 
     # create a new entry in debian/changelog
@@ -98,7 +99,7 @@ function build_mesa() {
     install_mesa
 
     cd "$md_build/mesa"
-    DEB_CFLAGS_PREPEND="$CFLAGS" DEB_CXXFLAGS_PREPEND="$CXXFLAGS" dpkg-buildpackage -us -uc -j$(nproc)
+    DEB_CFLAGS_PREPEND="$CFLAGS" DEB_CXXFLAGS_PREPEND="$CXXFLAGS" dpkg-buildpackage -us -uc -j2
 }
 
 function install_mesa() {
