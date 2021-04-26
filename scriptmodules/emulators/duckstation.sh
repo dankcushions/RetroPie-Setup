@@ -22,15 +22,13 @@ function depends_duckstation() {
 }
 
 function sources_duckstation() {
-    gitPullOrClone "$md_build" https://github.com/stenzek/duckstation.git dev
+    gitPullOrClone "$md_build" https://github.com/stenzek/duckstation.git
 }
 
 function build_duckstation() {
-    #cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISCORD_PRESENCE=OFF -DUSE_X11=OFF -DUSE_DRMKMS=ON -DBUILD_NOGUI_FRONTEND=ON -DBUILD_QT_FRONTEND=OFF
-    #make clean
-    #make
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_NOGUI_FRONTEND=ON -DBUILD_QT_FRONTEND=OFF -DUSE_DRMKMS=ON -GNinja .
-    ninja -j4
+    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISCORD_PRESENCE=OFF -DUSE_X11=OFF -DUSE_DRMKMS=ON -DBUILD_NOGUI_FRONTEND=ON -DBUILD_QT_FRONTEND=OFF
+    make clean
+    make
 
     md_ret_require="$md_build/bin/duckstation-nogui"
 }
@@ -45,12 +43,20 @@ function install_duckstation() {
 
 function configure_duckstation() {
     mkRomDir "psx"
-    moveConfigDir "$md_inst/bin/bios" "$biosdir"
+
     # create config file
     local config="$md_conf_root/psx/duckstation.ini"
     touch "$config"
     chown -R $user:$user "$config"
-    # chris, needed?
+
+    iniConfig " = " "" "$config"
+    # set BIOS path
+    if ! grep -q "\[BIOS\]" "$config"; then
+        echo "[BIOS]" >> "$config"
+    fi
+    iniSet "SearchDirectory" "$biosdir"
+
+    # needed?
     chown -R $user:$user "$md_inst/bin"
 
     addEmulator 0 "$md_id" "psx" "$md_inst/bin/duckstation-nogui -portable -settings $config -- %ROM%"
