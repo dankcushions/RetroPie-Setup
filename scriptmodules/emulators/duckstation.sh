@@ -26,7 +26,7 @@ function sources_duckstation() {
 }
 
 function build_duckstation() {
-    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISCORD_PRESENCE=OFF -DUSE_X11=OFF -DUSE_DRMKMS=ON -DBUILD_NOGUI_FRONTEND=ON -DBUILD_QT_FRONTEND=OFF
+    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISCORD_PRESENCE=OFF -DUSE_X11=OFF -DUSE_DRMKMS=ON -DBUILD_NOGUI_FRONTEND=ON -DBUILD_QT_FRONTEND=OFF .
     make clean
     make
 
@@ -44,21 +44,49 @@ function install_duckstation() {
 function configure_duckstation() {
     mkRomDir "psx"
 
+    # needed?
+    chown -R $user:$user "$md_inst/bin"
+
+#    addEmulator 0 "$md_id" "psx" "$md_inst/bin/duckstation-nogui -portable -settings $config -- %ROM%"
+    addEmulator 0 "$md_id" "psx" "$md_inst/bin/duckstation.sh %ROM%"
+    addSystem "psx"
+
+    [[ "$md_mode" == "remove" ]] && return
+
+    # copy hotkey remapping start script
+    cp "$md_data/duckstation.sh" "$md_inst/bin/"
+    chmod +x "$md_inst/bin/duckstation.sh"
+
     # create config file
     local config="$md_conf_root/psx/duckstation.ini"
     touch "$config"
     chown -R $user:$user "$config"
 
+    # set config defaults
     iniConfig " = " "" "$config"
-    # set BIOS path
+    if ! grep -q "\[Main\]" "$config"; then
+        echo "[Main]" >> "$config"
+    fi
+    # SettingsVersion = 3 stops overwrite of any settings when version number doesn't match
+    iniSet "SettingsVersion" "3"
+    iniSet "ControllerBackend" "evdev"
     if ! grep -q "\[BIOS\]" "$config"; then
         echo "[BIOS]" >> "$config"
     fi
     iniSet "SearchDirectory" "$biosdir"
+    if ! grep -q "\[MemoryCards\]" "$config"; then
+        echo "[MemoryCards]" >> "$config"
+    fi
+    iniSet "Directory" "$romdir/psx"
+    if ! grep -q "\[Display\]" "$config"; then
+        echo "[Display]" >> "$config"
+    fi
+    iniSet "LinearFiltering" "false"
+    iniSet "Directory" "$romdir/psx"
+    if ! grep -q "\[Hotkeys\]" "$config"; then
+        echo "[Hotkeys]" >> "$config"
+    fi
+    iniSet "OpenQuickMenu" "Keyboard/Escape"
 
-    # needed?
-    chown -R $user:$user "$md_inst/bin"
-
-    addEmulator 0 "$md_id" "psx" "$md_inst/bin/duckstation-nogui -portable -settings $config -- %ROM%"
-    addSystem "psx"
+    addAutoConf duckstation_hotkeys 1
 }
