@@ -502,6 +502,11 @@ function platform_rpi3() {
 
 function platform_rpi4() {
     cpu_armv8 "cortex-a72"
+    # check for vulkan support (added in mesa 20.3)
+    local mesa_version=$(dpkg-query --showformat='${Version}' --show libgl1-mesa-dev | cut -f1,2 -d'.')
+    if awk "BEGIN {exit !("$mesa_version" >= 20.3)}"; then
+        __platform_flags+=(vulkan)
+    fi
     __platform_flags+=(rpi gles gles3 gles31)
 }
 
