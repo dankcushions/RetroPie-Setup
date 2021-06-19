@@ -531,7 +531,8 @@ function platform_odroid-xu() {
 
 function platform_tegra-x1() {
     cpu_armv8 "cortex-a57"
-    __platform_flags+=(x11 gl)
+    __platform_flags+=(x11 gl vulkan)
+    __default_cpu_flags="-mcpu=cortex-a57"
 }
 
 function platform_jetson-nano() {
@@ -547,7 +548,7 @@ function platform_tinker() {
 
 function platform_x86() {
     __default_cpu_flags="-march=native"
-    __platform_flags+=(gl)
+    __platform_flags+=(gl vulkan)
     if [[ "$__has_kms" -eq 1 ]]; then
         __platform_flags+=(kms)
     else
@@ -556,7 +557,7 @@ function platform_x86() {
 }
 
 function platform_generic-x11() {
-    __platform_flags+=(x11 gl)
+    __platform_flags+=(x11 gl vulkan)
 }
 
 function platform_armv7-mali() {
