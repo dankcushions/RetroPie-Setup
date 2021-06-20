@@ -277,12 +277,13 @@ function map_retroarch_joystick() {
         key+="_$type"
         iniSet "$key" "$value"
 
-        # set button labels from autoconfig preset (if available), when  binding matches the preset
+        # set button labels from autoconfig preset (if available), when binding matches the preset
         if [[ -f "$autoconfig_preset" ]]; then
             iniGet "$key" "$autoconfig_preset"
             if [[ "$ini_value" == "$value" ]]; then
                 key+="_label"
-                iniGet "$key" "$autoconfig_preset" && iniSet "$key" "$ini_value"
+                iniGet "$key" "$autoconfig_preset"
+                [[ -n "$ini_value" ]] && iniSet "$key" "$ini_value"
             fi
         fi
     done
