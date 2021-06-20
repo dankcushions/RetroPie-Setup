@@ -240,7 +240,7 @@ function map_retroarch_joystick() {
     local type
     iniGet "input_driver"
     local input_driver="$ini_value"
-    local autoconfig_preset=$(grep -rwl "/opt/retropie/configs/all/retroarch/autoconfig-presets/$input_driver" -e "$DEVICE_NAME" | head -1)
+    local autoconfig_preset=$(grep -rwl "$configdir/all/retroarch/autoconfig-presets/$input_driver" -e "$DEVICE_NAME" | head -1)
     for key in "${keys[@]}"; do
         case "$input_type" in
             hat)
