@@ -28,7 +28,7 @@ function sources_lr-mame2000() {
 function build_lr-mame2000() {
     make clean
     local params=()
-    isPlatform "arm" && params+=("ARM=1" "USE_CYCLONE=1")
+    isPlatform "arm" && params+=("ARM=1" "USE_CYCLONE=1" "USE_DRZ80=1")
     isPlatform "aarch64" && params+=("IS_X86=0")
     make "${params[@]}"
     md_ret_require="$md_build/mame2000_libretro.so"
