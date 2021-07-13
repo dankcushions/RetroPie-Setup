@@ -23,6 +23,7 @@ function depends_retroarch() {
     isPlatform "mali" && depends+=(mali-fbdev)
     isPlatform "x11" && depends+=(libx11-xcb-dev libpulse-dev)
     isPlatform "vulkan" && depends+=(libvulkan-dev)
+    isPlatform "vulkan" && isPlatform "mesa" && depends+=(mesa-vulkan-drivers)
     isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc zlib1g-dev libfreetype6-dev)
     isPlatform "kms" && depends+=(libgbm-dev)
 
