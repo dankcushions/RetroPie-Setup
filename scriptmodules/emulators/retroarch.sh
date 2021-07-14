@@ -255,6 +255,9 @@ function configure_retroarch() {
     # enable video shaders
     iniSet "video_shader_enable" "true"
 
+    # enable vulkan
+    isPlatform "vulkan" && iniSet "video_driver" "vulkan"
+
     copyDefaultConfig "$config" "$configdir/all/retroarch.cfg"
     rm "$config"
 
